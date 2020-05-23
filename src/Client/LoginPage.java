@@ -5,10 +5,13 @@ import Client.Components.MyLabel;
 import Client.Components.MyPasswordField;
 import Client.Components.MyTextField;
 import Data.User;
+import Server.Server;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class LoginPage extends JPanel {
     private MyLabel logLabel, pasLabel;
@@ -55,6 +58,12 @@ public class LoginPage extends JPanel {
                     User u = new User();
                     u.setLogin(logField.getText());
                     u.setPassword(pasField.getText());
+
+                    try(FileWriter writer = new FileWriter("currentUser.txt", false))
+                    {
+                        writer.write(logField.getText());
+                    }
+                    catch(IOException ex){}
 
                     User authUser = frame.clientSocket.toLogin(u);
                     if(authUser != null){
